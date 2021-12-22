@@ -3,11 +3,11 @@ import { useEffect, useReducer } from 'react'
 function addToCart(cart, key) {
   if (cart.has(key)) {
     return new Map(
-      [...cart, [key, {qty: cart.get(key).qty + 1}]]
+      [...cart, [key, {count: cart.get(key).count + 1}]]
     )
   }
 
-  return new Map([[key, {qty: 1}], ...cart])
+  return new Map([[key, {count: 1}], ...cart])
 }
 
 function removeFromCart(cart, key) {
@@ -55,7 +55,7 @@ function Cart() {
     <ul>  
       {[...cart].map((item) => (
         <li key={item[0]}>
-          <p>{`isbn: ${item[0]}, qty: ${item[1].qty}`}</p>
+          <p>{`isbn: ${item[0]}, count: ${item[1].count}`}</p>
           <button data-isbn={item[0]} className="js-remove-from-cart">Remove</button>
         </li>
       ))}
