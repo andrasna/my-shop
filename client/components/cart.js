@@ -30,24 +30,22 @@ function Cart() {
 
   useEffect(() => {
     document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('js-add-to-cart')) {
-        const isbn = e.target.getAttribute('data-isbn') 
+      const {target} = e
+      const {classList} = target
 
+      if (classList.contains('js-add-to-cart')) {
         cartAction({
           type: 'add',
-          payload: isbn,
+          payload: target.getAttribute('data-isbn'),
         })
       }
 
-      if (e.target.classList.contains('js-remove-from-cart')) {
-        const isbn = e.target.getAttribute('data-isbn') 
-
+      if (classList.contains('js-remove-from-cart')) {
         cartAction({
           type: 'remove',
-          payload: isbn,
+          payload: target.getAttribute('data-isbn'),
         })
       }
-
     })
   }, [])
 
