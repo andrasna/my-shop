@@ -1,23 +1,27 @@
 import { useEffect, useReducer } from 'react'
 
-function addToCart(cart, newItem) {
-  const [key, obj] = newItem
-
+function addToCart(cart, key) {
   if (cart.has(key)) {
     return new Map(
-      [...cart, [key, {qty: obj.qty + cart.get(key).qty}]]
+      [...cart, [key, {qty: cart.get(key).qty + 1}]]
     )
   }
 
-  return new Map([newItem, ...cart])
+  return new Map([[key, {qty: 1}], ...cart])
+}
+
+function removeFromCart(cart, key) {
+  cart.delete(key)
+
+  return new Map(cart)
 }
 
 function cartReducer(cart, action) {
   switch (action.type) {
     case 'add':
-      return addToCart(cart, action.payload);
+      return addToCart(cart, action.payload)
     case 'remove':
-    // call remove function
+      return removeFromCart(cart, action.payload)
   }
 }
 
@@ -31,16 +35,29 @@ function Cart() {
 
         cartAction({
           type: 'add',
-          payload: [isbn, { qty: 1 }]
+          payload: isbn,
         })
       }
+
+      if (e.target.classList.contains('js-remove-from-cart')) {
+        const isbn = e.target.getAttribute('data-isbn') 
+
+        cartAction({
+          type: 'remove',
+          payload: isbn,
+        })
+      }
+
     })
   }, [])
 
   return (
     <ul>  
       {[...cart].map((item) => (
-        <li key={item[0]}>{`isbn: ${item[0]}, qty: ${item[1].qty}`}</li>
+        <li key={item[0]}>
+          <p>{`isbn: ${item[0]}, qty: ${item[1].qty}`}</p>
+          <button data-isbn={item[0]} className="js-remove-from-cart">Remove</button>
+        </li>
       ))}
     </ul>
   );
