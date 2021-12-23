@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { CartContext } from '../context/cart-context'
 
 function Products() {
   const [products, setProducts] = useState([]);
+  const {cartAction} = useContext(CartContext)
 
   useEffect(() => {
     (async () => {
@@ -18,7 +20,15 @@ function Products() {
         return (
           <li key={item.isbn} className="product">
             <h2>{item.title}</h2>
-            <button data-isbn={item.isbn} className="js-add-to-cart">
+
+            <button
+              onClick={() => {
+                cartAction({
+                  type: 'add',
+                  payload: item.isbn,
+                })}
+              }
+            >
               Add to cart
             </button>
           </li>
